@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-common-alertrules
+data:
+  rule_file_backoffice.yaml: |+
+    name: MatchmakerIpAllocationAlert
+    type: any
+    index: logstash-*
+    query_key: node_name
+    filter:
+    - query:
+        query_string:
+          query: '(log:"LCCE IP is not available for rphy " OR log:"LCCE IP is not available for rphy" OR log:"NSI Prov IPv6 is not available for rphy") AND (log:"*Not proceeding further")  AND (application_name:"matchmaker")'
+    alert: my_alerts.AlertManager
+    labels:
+      severity: major
+      kafka: 'false'
+      smart_alert: 'true'
+      alertsrc: ElasticSearch
+      host_impacted: vcmts-bo
+      #  dashboard: https://prod-kibana-01.tb-comcast.com/app/kibana#/discover?_g=()&_a=(columns:!(_source),index:c2ddb000-b118-11e8-8b43-a15ba76ce118,interval:auto,query:(language:lucene,query:'(log:%22LCCE%20IP%20is%20not%20available%20for%20rphy%20%22%20OR%20log:%22LCCE%20IP%20is%20not%20available%20for%20rphy%22%20OR%20log:%22NSI%20Prov%20IPv6%20is%20not%20available%20for%20rphy%22)%20AND%20(log:%22*Not%20proceeding%20further%22)%20%20AND%20(application_name:%22matchmaker%22)'),sort:!('@timestamp',desc))
+      alertlink: https://prod-va-alertsdashboard.tb-comcast.com/alertmanager/
+      wikilink: https://etwiki.sys.comcast.net/display/NGAN/Troubleshooting+Matrix#TroubleshootingMatrix-MatchmakerIpAllocationAlert
+    annotations:
+      description:  The NSI Prov IPv6 or NSI Prov IPv4 or LCCE IP was not available for rphymac .
+      summary: This alert will check if NSI Prov IPv6 or NSI Prov IPv4 or LCCE IP is not available for rphymac  .
