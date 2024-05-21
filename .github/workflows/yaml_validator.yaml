@@ -12,3 +12,4 @@ jobs:
       - name: Validate YAML file
         run: |
           yamllint -d "{extends: default, rules: {line-length: disable}}" alertrules.yaml
+          
